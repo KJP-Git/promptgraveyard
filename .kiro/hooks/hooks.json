@@ -1,0 +1,14 @@
+{
+  "hooks": [
+    {
+      "id": "prompt-graveyard-evaluator",
+      "name": "Prompt Graveyard Auto-Evaluator",
+      "description": "🎃 Automatically evaluates prompts when files change in /prompts directory",
+      "configFile": "prompt-evaluation.yaml",
+      "enabled": true,
+      "tags": ["evaluation", "llm", "automation", "halloween"],
+      "author": "Kiroween Hackathon Team",
+      "version": "1.0.0"
+    }
+  ]
+}

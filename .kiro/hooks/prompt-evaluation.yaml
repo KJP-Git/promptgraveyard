@@ -1,0 +1,283 @@
+# Spooky Prompt Graveyard Auto-Evaluation Hook 🎃
+# Automatically evaluates prompts when they're added or modified in /prompts directory
+
+name: "prompt-graveyard-evaluator"
+description: "Haunted evaluation system that automatically tests prompts against multiple LLMs when files change in /prompts directory"
+version: "1.0.0"
+
+# Hook Trigger Configuration
+trigger:
+  type: "file_watcher"
+  paths:
+    - "prompts/**/*.txt"
+    - "prompts/**/*.md" 
+    - "prompts/**/*.prompt"
+  events:
+    - "created"
+    - "modified"
+  debounce_ms: 2000  # Wait 2 seconds after last change to avoid rapid-fire evaluations
+
+# Execution Configuration
+execution:
+  timeout_seconds: 300  # 5 minutes max per evaluation
+  retry_attempts: 2
+  retry_delay_seconds: 5
+  
+# Environment Requirements
+environment:
+  required_env_vars:
+    - "OPENAI_API_KEY"
+    - "GROQ_API_KEY"
+  optional_env_vars:
+    - "ANTHROPIC_API_KEY"
+
+# Hook Execution Script
+script: |
+  # 🧟‍♂️ Welcome to the Prompt Graveyard Evaluation Chamber! 🧟‍♂️
+  
+  import os
+  import json
+  import time
+  import asyncio
+  from datetime import datetime, timezone
+  from pathlib import Path
+  from typing import Dict, List, Any
+  
+  # Import our spooky evaluation modules
+  from evaluation.llm_providers import LLMProviderFactory
+  from evaluation.metrics_calculator import MetricsCalculator, ZombieClassifier
+  from evaluation.revival_agent import RevivalAgent
+  
+  async def evaluate_haunted_prompt(file_path: str) -> Dict[str, Any]:
+      """
+      Summon the evaluation spirits to test a prompt across multiple LLMs
+      Returns the cursed evaluation results... 👻
+      """
+      
+      print(f"🎃 Awakening evaluation spirits for: {file_path}")
+      
+      # Read the cursed prompt from the graveyard
+      prompt_content = Path(file_path).read_text().strip()
+      if not prompt_content:
+          print(f"💀 Empty prompt detected - skipping evaluation")
+          return None
+          
+      # Load our spooky configuration
+      spec_config = load_graveyard_config()
+      
+      # Initialize our army of LLM providers
+      llm_factory = LLMProviderFactory(spec_config['llm_providers'])
+      active_providers = llm_factory.get_active_providers()
+      
+      print(f"🧙‍♀️ Summoning {len(active_providers)} LLM spirits...")
+      
+      # Prepare the evaluation cauldron
+      evaluation_results = {
+          'prompt_id': generate_prompt_id(file_path),
+          'file_path': file_path,
+          'prompt_text': prompt_content,
+          'timestamp': datetime.now(timezone.utc).isoformat(),
+          'llm_responses': {},
+          'metrics': {},
+          'zombie_status': None,
+          'revival_suggestions': []
+      }
+      
+      # Cast evaluation spells on each LLM provider
+      for provider_name, provider in active_providers.items():
+          try:
+              print(f"🔮 Casting evaluation spell on {provider_name}...")
+              
+              start_time = time.time()
+              response = await provider.generate_response(prompt_content)
+              end_time = time.time()
+              
+              # Calculate the dark metrics
+              latency_ms = (end_time - start_time) * 1000
+              cost = provider.calculate_cost(prompt_content, response)
+              
+              evaluation_results['llm_responses'][provider_name] = {
+                  'response': response,
+                  'latency_ms': latency_ms,
+                  'cost_usd': cost,
+                  'timestamp': datetime.now(timezone.utc).isoformat(),
+                  'model': provider.model_name
+              }
+              
+              print(f"✨ {provider_name} responded in {latency_ms:.0f}ms (${cost:.4f})")
+              
+          except Exception as e:
+              print(f"💀 {provider_name} failed to respond: {str(e)}")
+              evaluation_results['llm_responses'][provider_name] = {
+                  'error': str(e),
+                  'timestamp': datetime.now(timezone.utc).isoformat()
+              }
+      
+      # Summon the metrics calculator to judge the responses
+      metrics_calculator = MetricsCalculator(spec_config['evaluation_metrics'])
+      calculated_metrics = await metrics_calculator.calculate_all_metrics(
+          prompt_content, 
+          evaluation_results['llm_responses']
+      )
+      
+      evaluation_results['metrics'] = calculated_metrics
+      
+      # Determine if this prompt has become a zombie 🧟‍♂️
+      zombie_classifier = ZombieClassifier(spec_config['zombie_classification'])
+      zombie_status = zombie_classifier.classify_prompt(calculated_metrics)
+      evaluation_results['zombie_status'] = zombie_status
+      
+      print(f"🧟‍♂️ Zombie Classification: {zombie_status['severity']} (score: {zombie_status['overall_score']:.2f})")
+      
+      # If it's a zombie, summon the revival agent
+      if zombie_status['is_zombie']:
+          print(f"💀 Zombie detected! Summoning revival agent...")
+          revival_agent = RevivalAgent(spec_config['revival_agent'])
+          suggestions = await revival_agent.generate_revival_suggestions(
+              prompt_content, 
+              calculated_metrics,
+              zombie_status
+          )
+          evaluation_results['revival_suggestions'] = suggestions
+          print(f"🧙‍♀️ Generated {len(suggestions)} revival suggestions")
+      
+      return evaluation_results
+  
+  def load_graveyard_config() -> Dict[str, Any]:
+      """Load the cursed configuration from spec.yaml"""
+      import yaml
+      with open('.kiro/spec.yaml', 'r') as f:
+          return yaml.safe_load(f)
+  
+  def generate_prompt_id(file_path: str) -> str:
+      """Generate a unique ID for the prompt based on file path and timestamp"""
+      import hashlib
+      content = f"{file_path}_{datetime.now().isoformat()}"
+      return hashlib.md5(content.encode()).hexdigest()[:12]
+  
+  def store_in_graveyard(results: Dict[str, Any]) -> None:
+      """Store the evaluation results in our cursed data storage"""
+      
+      # Ensure the data directory exists
+      os.makedirs('data', exist_ok=True)
+      
+      # Append to results.json (JSONL format for streaming)
+      results_file = Path('data/results.json')
+      
+      with open(results_file, 'a') as f:
+          json.dump(results, f, separators=(',', ':'))
+          f.write('\n')
+      
+      print(f"💾 Results stored in the graveyard: {results_file}")
+      
+      # Also store in ChromaDB if enabled
+      spec_config = load_graveyard_config()
+      if spec_config.get('storage', {}).get('vector_store', {}).get('enabled', False):
+          store_in_vector_graveyard(results, spec_config)
+  
+  def store_in_vector_graveyard(results: Dict[str, Any], config: Dict[str, Any]) -> None:
+      """Store embeddings in ChromaDB for semantic similarity"""
+      try:
+          import chromadb
+          from sentence_transformers import SentenceTransformer
+          
+          # Initialize the embedding model
+          embedding_model = SentenceTransformer(
+              config['storage']['vector_store']['embedding_model']
+          )
+          
+          # Create embeddings for the prompt
+          prompt_embedding = embedding_model.encode([results['prompt_text']])[0].tolist()
+          
+          # Connect to ChromaDB
+          chroma_client = chromadb.PersistentClient(
+              path=config['storage']['vector_store']['path']
+          )
+          
+          collection = chroma_client.get_or_create_collection(
+              name=config['storage']['vector_store']['collection_name']
+          )
+          
+          # Store the prompt with its embedding
+          collection.add(
+              embeddings=[prompt_embedding],
+              documents=[results['prompt_text']],
+              metadatas=[{
+                  'prompt_id': results['prompt_id'],
+                  'file_path': results['file_path'],
+                  'zombie_status': results['zombie_status']['severity'],
+                  'overall_score': results['zombie_status']['overall_score'],
+                  'timestamp': results['timestamp']
+              }],
+              ids=[results['prompt_id']]
+          )
+          
+          print(f"🔮 Stored embedding in vector graveyard")
+          
+      except Exception as e:
+          print(f"⚠️ Failed to store in vector graveyard: {str(e)}")
+  
+  # Main execution - the ritual begins! 🎭
+  async def main():
+      changed_file = os.environ.get('KIRO_HOOK_FILE_PATH')
+      
+      if not changed_file:
+          print("💀 No file path provided - the spirits are confused!")
+          return
+      
+      print(f"🎃 PROMPT GRAVEYARD EVALUATION RITUAL BEGINS! 🎃")
+      print(f"📁 Evaluating: {changed_file}")
+      
+      try:
+          # Perform the dark evaluation ritual
+          results = await evaluate_haunted_prompt(changed_file)
+          
+          if results:
+              # Store the cursed results
+              store_in_graveyard(results)
+              
+              # Log summary to console
+              zombie_status = results['zombie_status']
+              metrics = results['metrics']
+              
+              print(f"\n🎭 EVALUATION COMPLETE! 🎭")
+              print(f"📊 Overall Score: {zombie_status['overall_score']:.2f}")
+              print(f"🧟‍♂️ Status: {zombie_status['severity'].upper()}")
+              print(f"⚡ Avg Latency: {metrics.get('avg_latency_ms', 0):.0f}ms")
+              print(f"💰 Total Cost: ${metrics.get('total_cost_usd', 0):.4f}")
+              
+              if zombie_status['is_zombie']:
+                  print(f"💀 ZOMBIE ALERT! This prompt needs revival!")
+                  print(f"🧙‍♀️ {len(results['revival_suggestions'])} revival suggestions generated")
+              else:
+                  print(f"✨ Prompt is alive and well! No revival needed.")
+              
+          else:
+              print("👻 No evaluation performed - empty or invalid prompt")
+              
+      except Exception as e:
+          print(f"💀 RITUAL FAILED! Error: {str(e)}")
+          raise
+      
+      print(f"🎃 The spirits return to their slumber... 🎃\n")
+  
+  # Execute the ritual
+  if __name__ == "__main__":
+      asyncio.run(main())
+
+# Notification Configuration
+notifications:
+  on_success:
+    message: "🎃 Prompt evaluation complete! Check /data/results.json for spooky metrics"
+    
+  on_failure:
+    message: "💀 Evaluation ritual failed! The spirits are displeased..."
+    
+  on_zombie_detected:
+    message: "🧟‍♂️ ZOMBIE PROMPT DETECTED! Revival suggestions generated"
+
+# Logging Configuration  
+logging:
+  level: "INFO"
+  file: "data/evaluation.log"
+  format: "[{timestamp}] {level} - 🎃 {message}"
