@@ -1,0 +1,296 @@
+/* 🧟‍♂️ Zombie Prompt Card Styles 🧟‍♂️ */
+
+.zombie-card {
+  background: linear-gradient(135deg, var(--tomb-gray) 0%, var(--shadow-black) 100%);
+  border: 3px solid var(--blood-red);
+  border-radius: 15px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(139, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.zombie-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(139, 0, 0, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.zombie-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(139, 0, 0, 0.6);
+}
+
+/* 💀 Header Section 💀 */
+.zombie-header {
+  background: linear-gradient(135deg, var(--blood-red) 0%, var(--shadow-black) 100%);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 2px solid var(--eerie-green);
+  position: relative;
+  z-index: 1;
+}
+
+.zombie-icon {
+  font-size: 3rem;
+  animation: sway 3s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+.zombie-info {
+  flex: 1;
+}
+
+.zombie-title {
+  font-family: var(--font-horror);
+  font-size: 1.5rem;
+  color: var(--eerie-green);
+  text-shadow: 0 0 10px var(--eerie-green);
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+}
+
+.severity-badge {
+  font-family: var(--font-decay);
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--ghost-white);
+  letter-spacing: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 📝 Body Section 📝 */
+.zombie-body {
+  padding: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.prompt-preview {
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 3px solid var(--toxic-purple);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 5px;
+}
+
+.prompt-text {
+  font-family: 'Courier New', monospace;
+  color: var(--ghost-white);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* 📊 Metrics Row 📊 */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metric {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--fog-gray);
+  border-radius: 8px;
+  padding: 0.8rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.metric:hover {
+  border-color: var(--eerie-green);
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+  transform: scale(1.05);
+}
+
+.metric-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.metric-label {
+  font-family: var(--font-decay);
+  display: block;
+  font-size: 0.7rem;
+  color: var(--toxic-purple);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.3rem;
+}
+
+.metric-value {
+  font-family: var(--font-horror);
+  display: block;
+  font-size: 1.2rem;
+  color: var(--eerie-green);
+  text-shadow: 0 0 10px var(--eerie-green);
+}
+
+/* 🎭 Action Buttons 🎭 */
+.card-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.action-button {
+  font-family: var(--font-creepy);
+  flex: 1;
+  padding: 0.8rem;
+  border: 2px solid;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.details-button {
+  background: linear-gradient(135deg, var(--toxic-purple) 0%, var(--shadow-black) 100%);
+  border-color: var(--toxic-purple);
+  color: var(--ghost-white);
+}
+
+.details-button:hover {
+  background: var(--toxic-purple);
+  box-shadow: 0 0 20px var(--toxic-purple);
+  transform: translateY(-2px);
+}
+
+.revival-button {
+  background: linear-gradient(135deg, var(--eerie-green) 0%, var(--shadow-black) 100%);
+  border-color: var(--eerie-green);
+  color: var(--shadow-black);
+  font-weight: bold;
+}
+
+.revival-button:hover {
+  background: var(--eerie-green);
+  box-shadow: 0 0 20px var(--eerie-green);
+  transform: translateY(-2px);
+}
+
+/* 📜 Details Panel 📜 */
+.details-panel,
+.revival-panel {
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--fog-gray);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panel-title {
+  font-family: var(--font-decay);
+  font-size: 1.2rem;
+  color: var(--eerie-green);
+  text-shadow: 0 0 10px var(--eerie-green);
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.full-prompt {
+  font-family: 'Courier New', monospace;
+  color: var(--ghost-white);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 3px solid var(--blood-red);
+  border-radius: 5px;
+}
+
+.detail-info {
+  font-size: 0.85rem;
+  color: var(--fog-gray);
+}
+
+.detail-info p {
+  margin: 0.5rem 0;
+}
+
+.detail-info strong {
+  color: var(--toxic-purple);
+}
+
+/* 🧙‍♀️ Revival Panel 🧙‍♀️ */
+.revival-info {
+  color: var(--ghost-white);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.revival-action {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* ⏰ Footer Section ⏰ */
+.zombie-footer {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.8rem 1.5rem;
+  border-top: 1px solid var(--fog-gray);
+  position: relative;
+  z-index: 1;
+}
+
+.timestamp {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: var(--fog-gray);
+}
+
+/* 📱 Responsive Design 📱 */
+@media (max-width: 768px) {
+  .metrics-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .card-actions {
+    flex-direction: column;
+  }
+  
+  .zombie-title {
+    font-size: 1.2rem;
+  }
+}

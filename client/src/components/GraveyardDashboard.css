@@ -1,0 +1,122 @@
+/* 🪦 Graveyard Dashboard Styles 🪦 */
+
+.graveyard-dashboard {
+  margin-top: 2rem;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-title {
+  font-family: var(--font-horror);
+  font-size: 2.5rem;
+  color: var(--blood-red);
+  text-shadow: 
+    0 0 10px var(--blood-red),
+    0 0 20px var(--blood-red),
+    2px 2px 0 var(--shadow-black);
+  letter-spacing: 3px;
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 10px var(--blood-red), 0 0 20px var(--blood-red), 2px 2px 0 var(--shadow-black); }
+  50% { text-shadow: 0 0 20px var(--blood-red), 0 0 30px var(--blood-red), 2px 2px 0 var(--shadow-black); }
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.spooky-select {
+  font-family: var(--font-decay);
+  background: var(--tomb-gray);
+  color: var(--ghost-white);
+  border: 2px solid var(--toxic-purple);
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+}
+
+.spooky-select:hover {
+  border-color: var(--eerie-green);
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+}
+
+.spooky-select:focus {
+  outline: none;
+  border-color: var(--eerie-green);
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+}
+
+/* 🧟‍♂️ Zombie Grid 🧟‍♂️ */
+.zombie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* 👻 Empty State 👻 */
+.empty-graveyard {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(26, 26, 26, 0.5);
+  border: 2px dashed var(--fog-gray);
+  border-radius: 15px;
+  margin-top: 2rem;
+}
+
+.empty-icon {
+  font-size: 5rem;
+  animation: float 3s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+.empty-text {
+  font-family: var(--font-creepy);
+  font-size: 1.5rem;
+  color: var(--toxic-purple);
+  text-shadow: 0 0 10px var(--toxic-purple);
+  margin-bottom: 0.5rem;
+}
+
+.empty-subtext {
+  font-family: var(--font-decay);
+  font-size: 1.2rem;
+  color: var(--eerie-green);
+  text-shadow: 0 0 10px var(--eerie-green);
+}
+
+/* 📱 Responsive Design 📱 */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+  
+  .controls {
+    flex-direction: column;
+  }
+  
+  .zombie-grid {
+    grid-template-columns: 1fr;
+  }
+}
