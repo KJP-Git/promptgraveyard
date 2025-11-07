@@ -1,0 +1,11 @@
+You are an expert software engineer. Write a comprehensive guide on implementing a REST API with Node.js and Express.
+
+Please include:
+1. Project setup and dependencies
+2. Basic server configuration
+3. Route handling and middleware
+4. Error handling best practices
+5. Security considerations
+6. Testing strategies
+
+Format your response with clear sections, code examples, and explanations for each concept.

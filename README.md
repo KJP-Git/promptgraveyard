@@ -28,29 +28,53 @@ Prompt Graveyard is a comprehensive system that:
 
 ## 🚀 Quick Start
 
+**[📖 Full Quick Start Guide →](QUICKSTART.md)** | **[🎯 Examples & Demo →](examples/README.md)**
+
+### 3-Step Quick Start
+
+```bash
+# 1. Run evaluation demo with sample prompts
+python examples/run-evaluation-demo.py
+
+# 2. Start the API server
+cd server && npm install && npm run dev
+
+# 3. Query the results
+curl "http://localhost:3001/api/prompts/zombies"
+```
+
 ### Prerequisites
 - Node.js 18+
 - Python 3.8+ (for evaluation pipeline)
-- API keys for LLM providers (OpenAI, Groq, etc.)
+- API keys for LLM providers (OpenAI, Groq, etc.) - *optional for demo*
 
-### 1. Clone and Setup
+### Full Setup
+
+#### 1. Clone and Setup
 ```bash
-git clone <your-repo-url>
-cd prompt-graveyard
+git clone https://github.com/KJP-Git/promptgraveyard.git
+cd promptgraveyard
 ```
 
-### 2. Start the API Server
+#### 2. Run the Demo (No API Keys Required)
+```bash
+# Evaluate sample prompts with mock LLMs
+python examples/run-evaluation-demo.py
+```
+
+#### 3. Start the API Server
 ```bash
 cd server
 ./start.sh  # Automated setup and start
+# OR manually: npm install && npm run dev
 ```
 
-### 3. Set up Agent Hooks (Optional)
+#### 4. Set up Agent Hooks (Optional)
 ```bash
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Set your API keys
+# Set your API keys for real LLM evaluation
 export OPENAI_API_KEY="your-key-here"
 export GROQ_API_KEY="your-key-here"
 
@@ -58,7 +82,7 @@ export GROQ_API_KEY="your-key-here"
 python test_evaluation.py
 ```
 
-### 4. Add Prompts for Evaluation
+#### 5. Add Prompts for Evaluation
 ```bash
 # Add prompts to the prompts directory
 echo "Write a creative story about AI" > prompts/my-prompt.txt
